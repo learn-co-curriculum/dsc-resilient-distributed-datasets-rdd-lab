@@ -1,7 +1,7 @@
 
 # Resilient Distributed Datasets (RDDs)
 
-### Introduction
+## Introduction
 
 Resilient Distributed Datasets (RDD) are fundamental data structures of Spark. An RDD is, essentially, the Spark representation of a set of data, spread across multiple machines, with APIs to let you act on it. An RDD could come from any datasource, e.g. text files, a database, a JSON file etc.
 
@@ -11,7 +11,10 @@ This is quite a handful. In this lesson, we will try to demistify RDDs with some
 
 *__Note:__ Your are advised to visit all the included external links to see more examples of stated concepts.* 
 
-## OBJECTIVES: 
+## Objectives
+
+You will be able to:
+
 * Describe RDDs as fundamental storage units in Spark computing environment
 * Create RDDs from Python collections
 * Set number of partitions for parallelizing RDDs
@@ -1431,7 +1434,7 @@ In the following labs. we shall practice the key transformations and actions in 
 - [RDDs in Apache Spark](https://data-flair.training/blogs/create-rdds-in-apache-spark/)
 - [Programming with RDDs](https://runawayhorse001.github.io/LearningApacheSpark/rdd.html)
 
-### SUMMARY
+## Summary
 
 In this lesson we went through a brief introduction to RDD creation from a Python collection, setting number of logical partitions for an RDD and extracting lineage and of an RDD in a spark application. We also looked at checking an RDD's id used by spark and setting names for RDDs as an indication of content. Following labs will build upon this knowledge and we shall see how transformations and actions can be applied to RDDs in a distributed setup. 
 
