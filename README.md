@@ -1,5 +1,5 @@
 
-# Resilient Distributed Datasets (RDDs)
+# Resilient Distributed Datasets (RDDs) - Lab
 
 ## Introduction
 
