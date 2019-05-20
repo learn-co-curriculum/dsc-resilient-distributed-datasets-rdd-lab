@@ -79,9 +79,8 @@ Let's see how transformations and actions work through a simple example. In this
 
 We need some data to start experimenting with RDDs. Let's create some sample data and see how RDDs handle it. To practice working with RDDs, we're going to use a simple Python list.
 
-- Create a Python list `data` of integers between 1 and 1000. 
-- Use the `range()` function to create this list of a length = 1000 (1 - 1000 inclusive). 
-- Sanity check : confirm the length of the list 
+- Create a Python list `data` of integers between 1 and 1000 using the `range()` function. 
+- Sanity check : confirm the length of the list (it should be 1000)
 
 
 ```python
@@ -98,7 +97,7 @@ len(nums)
 
 ### Initialize an RDD
 
-To initialize an RDD, first create import `pyspark` and then create a SparkContext.
+To initialize an RDD, first import `pyspark` and then create a SparkContext assigned to the variable `sc`. Use 'local[*]' as the master.
 
 
 ```python
@@ -106,7 +105,7 @@ import pyspark
 sc = pyspark.SparkContext('local[*]')
 ```
 
-Once you've created the SparkContext, you can use the `parallelize` method to create an rdd. Here, create one called `rdd` with 10 partitions.
+Once you've created the SparkContext, you can use the `parallelize` method to create an rdd. Here, create one called `rdd` with 10 partitions using `data` as the collection you are parallelizing.
 
 
 ```python
@@ -1473,7 +1472,7 @@ sales_figures
 
 
 
-We now have sales prices for 1000 items currently for sale at BuyStuff. Now create an RDD called `price_items` using the newly created data.
+We now have sales prices for 1000 items currently for sale at BuyStuff. Now create an RDD called `price_items` using the newly created data with 10 slices. After you create it, use one of the basic actions to see what's in the RDD.
 
 
 ```python
@@ -1531,7 +1530,7 @@ revenue_minus_tax.take(10)
 
 ### Lambda Functions
 
-Note that you can also use lambda functions if you want to quickly perform simple operations on data without creating a function. Let's assume that BuyStuff has also decided to offer a 10% discount on all of their items on the pre-tax amounts of each item. Use a lambda function within a map method to apply the additional 10% loss in revenue for BuyStuff.
+Note that you can also use lambda functions if you want to quickly perform simple operations on data without creating a function. Let's assume that BuyStuff has also decided to offer a 10% discount on all of their items on the pre-tax amounts of each item. Use a lambda function within a map method to apply the additional 10% loss in revenue for BuyStuff and assign the transformed RDD to a new RDD called `discounted`.
 
 
 ```python
@@ -1608,7 +1607,7 @@ discounted.toDebugString()
 
 ### Map vs. Flatmap
 
-Depending on how you want your data to be outputted, you might want to use flatMap, let's take a look at how it performs operations versus the standard map. Let's say we wanted to maintain the original amount BuyStuff receives for each item as well as the new amount after the tax and discount are applied.
+Depending on how you want your data to be outputted, you might want to use flatMap rather than a simple map. Let's take a look at how it performs operations versus the standard map. Let's say we wanted to maintain the original amount BuyStuff receives for each item as well as the new amount after the tax and discount are applied. Create a map function that will a tuple with (original price, post-discount price).
 
 
 ```python
@@ -1621,7 +1620,7 @@ print(mapped.take(10))
     [(0.7461417892908068, 0.6178054015327881), (1.0516980354349175, 0.8708059733401117), (2.017327151511592, 1.6703468814515983), (0.17555392107371448, 0.1453586466490356), (4.3624584377810995, 3.61211558648275), (3.14786872854041, 2.6064353072314597), (5.75731245351263, 4.767054711508457), (5.075186267246741, 4.202254229280302), (3.9035082665726355, 3.232104844722142), (5.738197298803666, 4.751227363409436)]
 
 
-Note that we have 1000 tuples created to our specification. Let's take a look at how flatMap differs in its implementation.
+Note that we have 1000 tuples created to our specification. Let's take a look at how flatMap differs in its implementation. Use the `flatMap` method with the same function you created above.
 
 
 ```python
@@ -1638,7 +1637,7 @@ Rather than being represented by tuples, all of the  values are now on the same 
 
 ## Filter
 After meeting with some external consultants, BuyStuff has determined that its business will be more profitable if it focuses on higher ticket items. Now, use the filter method to select items that bring in more than $300 after tax and discount have been removed. A filter method is a specialized form of a map function that only returns the items that match a certain criteria. In the cell below:
-* use a lambda function within a filter function to meet the consultant's suggestion's specifications
+* use a lambda function within a filter function to meet the consultant's suggestion's specifications. set RDD = `selected_items`
 * calculate the total number of items remaining in BuyStuff's inventory
 
 
@@ -1670,7 +1669,7 @@ selected_items.reduce(lambda x,y :x + y)
 
 
 
-The time has come for BuyStuff to open up shop and start selling it's goods. It only has one of each item, but it's allowing 50 lucky users to buy as many items as they want while they remain in stock. Within seconds, BuyStuff is sold out. 
+The time has come for BuyStuff to open up shop and start selling it's goods. It only has one of each item, but it's allowing 50 lucky users to buy as many items as they want while they remain in stock. Within seconds, BuyStuff is sold out. Below, you'll find the sales data in an RDD with tuples of (user, item bought).
 
 
 ```python
@@ -1698,7 +1697,7 @@ sales_data.take(7)
 It's time to determine some basic statistics about BuyStuff users.
 
 Let's start off by creating an RDD that determines how much each user spent in total.
-To do this we can use a method called __reduceByKey__ to perform reducing operations while grouping by keys. After you have calculated the total, use the __sortBy__ method on the RDD to rank the users from highest spending to least spending. Then collect those values.
+To do this we can use a method called __reduceByKey__ to perform reducing operations while grouping by keys. After you have calculated the total, use the __sortBy__ method on the RDD to rank the users from highest spending to least spending.
 
 
 
