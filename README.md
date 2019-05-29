@@ -1,17 +1,17 @@
 
 ## Resilient Distributed Datasets (RDDs) - Lab
 
-Resilient Distributed Datasets (RDD) are fundamental data structures of Spark. An RDD is, essentially, the Spark representation of a set of data, spread across multiple machines, with APIs to let you act on it. An RDD could come from any datasource, e.g. text files, a database, a JSON file etc.
+Resilient Distributed Datasets (RDD) are fundamental data structures of Spark. An RDD is, essentially, the Spark representation of a set of data, spread across multiple machines, with APIs to let you act on it. An RDD can come from any data source, e.g. text files, a database, a JSON file, etc.
 
 
 ## Objectives
 
 You will be able to:
 
-* Describe RDDs as fundamental storage units in Spark computing environment
+* Describe RDDs as fundamental storage units in the Spark computing environment
 * Create RDDs from Python collections
 * Set number of partitions for parallelizing RDDs
-* Review an RDD's dependancy graph at different stages of processing. 
+* Review an RDD's dependency graph at different stages of processing. 
 * Apply the map(func) transformation to a given function on all elements of an RDD in different partitions
 * Use collect() action to trigger the processing stage of spark's lazy evaluation
 * Use count() action to calculate the number of elements of a parallelized RDD
@@ -29,7 +29,7 @@ Distributed: The data is contained on multiple nodes of a cluster-computing oper
 
 Dataset: The dataset has been * partitioned * across the multiple nodes. 
 
-RDDs are the building block upon which more high level spark operations are based upon. Chances are, if you are performing an action using Spark, the operation involves RDDs. 
+RDDs are the building block upon which more high-level Spark operations are based upon. Chances are, if you are performing an action using Spark, the operation involves RDDs. 
 
 
 
@@ -53,7 +53,7 @@ In Spark, we first create a __base RDD__ and then apply one or more transformati
 
 Transformations create a new data set from an existing one by passing each dataset element through a function and returning a new RDD representing the results. In short, creating an RDD from an existing RDD is ‘transformation’.
 All transformations in Spark are lazy. They do not compute their results right away. Instead, they just remember the transformations applied to some base data set (e.g. a file). The transformations are only computed when an action requires a result that needs to be returned to the driver program.
-A transformation a RDD that returns another RDD, like map, flatMap, filter, reduceByKey, join, cogroup, etc.
+A transformation is an RDD that returns another RDD, like map, flatMap, filter, reduceByKey, join, cogroup, etc.
 
 ### Actions
 Actions return final results of RDD computations. Actions trigger execution using lineage graph to load the data into original RDD and carry out all intermediate transformations and return the final results to the Driver program or writes it out to the file system. An action returns a value (to a Spark driver - the user program).
@@ -80,7 +80,7 @@ Let's see how transformations and actions work through a simple example. In this
 We need some data to start experimenting with RDDs. Let's create some sample data and see how RDDs handle it. To practice working with RDDs, we're going to use a simple Python list.
 
 - Create a Python list `data` of integers between 1 and 1000 using the `range()` function. 
-- Sanity check : confirm the length of the list (it should be 1000)
+- Sanity check: confirm the length of the list (it should be 1000)
 
 
 ```python
@@ -1204,7 +1204,7 @@ rdd.collect()
 
 ## Map functions
 
-Now that you've working a little bit with RDDs, let's make this a little more interesting. Imagine you're running a hot new ecommerce startup called BuyStuff, and you're trying to track of how much it charges customers from each item sold. In the next cell, we're going to create simulated data by multiplying the values 1-1000 be a random number from 0-1.
+Now that you've been working a little bit with RDDs, let's make this a little more interesting. Imagine you're running a hot new e-commerce startup called BuyStuff, and you're trying to track of how much it charges customers from each item sold. In the next cell, we're going to create simulated data by multiplying the values 1-1000 be a random number from 0-1.
 
 
 ```python
@@ -1505,7 +1505,7 @@ def sales_tax(num):
 revenue_minus_tax = price_items.map(sales_tax)
 ```
 
-Remember, Spark has __lazy evaluation__, which means that the `sales_tax` function is a transformer that is not executed until you call use an action. Use one of the collection methods to execute the transformer now a part of the RDD and observe the contents of the `revenue_minus_tax` rdd.
+Remember, Spark has __lazy evaluation__, which means that the `sales_tax` function is a transformer that is not executed until you call an action. Use one of the collection methods to execute the transformer now a part of the RDD and observe the contents of the `revenue_minus_tax` rdd.
 
 
 ```python
@@ -1636,7 +1636,7 @@ print(flat_mapped.take(10))
 Rather than being represented by tuples, all of the  values are now on the same level. When we are trying to combine different items together, it is sometimes necessary to use flatmap rather than map in order to properly reduce to our specifications. This is not one of those instances, but int he upcoming lab, you just might have to use it.
 
 ## Filter
-After meeting with some external consultants, BuyStuff has determined that its business will be more profitable if it focuses on higher ticket items. Now, use the filter method to select items that bring in more than $300 after tax and discount have been removed. A filter method is a specialized form of a map function that only returns the items that match a certain criteria. In the cell below:
+After meeting with some external consultants, BuyStuff has determined that its business will be more profitable if it focuses on higher ticket items. Now, use the filter method to select items that bring in more than $300 after tax and discount have been removed. A filter method is a specialized form of a map function that only returns the items that match a certain criterion. In the cell below:
 * use a lambda function within a filter function to meet the consultant's suggestion's specifications. set RDD = `selected_items`
 * calculate the total number of items remaining in BuyStuff's inventory
 
@@ -1655,7 +1655,7 @@ selected_items.count()
 
 ## Reduce
 
-Now it's time to figure out how much money BuyStuff would make from selling one of all of it's items after they've reduced their inventory. Use a reduce method with a lambda function to to add up all of the values in the RDD. Your lambda function should have two variables.
+Now it's time to figure out how much money BuyStuff would make from selling one of all of its items after they've reduced their inventory. Use a reduce method with a lambda function to add up all of the values in the RDD. Your lambda function should have two variables.
 
 
 ```python
@@ -1669,7 +1669,7 @@ selected_items.reduce(lambda x,y :x + y)
 
 
 
-The time has come for BuyStuff to open up shop and start selling it's goods. It only has one of each item, but it's allowing 50 lucky users to buy as many items as they want while they remain in stock. Within seconds, BuyStuff is sold out. Below, you'll find the sales data in an RDD with tuples of (user, item bought).
+The time has come for BuyStuff to open up shop and start selling its goods. It only has one of each item, but it's allowing 50 lucky users to buy as many items as they want while they remain in stock. Within seconds, BuyStuff is sold out. Below, you'll find the sales data in an RDD with tuples of (user, item bought).
 
 
 ```python
@@ -1697,7 +1697,7 @@ sales_data.take(7)
 It's time to determine some basic statistics about BuyStuff users.
 
 Let's start off by creating an RDD that determines how much each user spent in total.
-To do this we can use a method called __reduceByKey__ to perform reducing operations while grouping by keys. After you have calculated the total, use the __sortBy__ method on the RDD to rank the users from highest spending to least spending.
+To do this we can use a method called __reduceByKey__ to perform reducing operations while grouping by keys. After you have calculated the total, use the __sortBy__ method on the RDD to rank the users from the highest spending to the least spending.
 
 
 
