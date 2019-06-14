@@ -47,7 +47,7 @@ Key Characteristics of RDDs:
 In Spark, we first create a __base RDD__ and then apply one or more transformations to that base RDD following our processing needs. Being immutable means, **once an RDD is created, it cannot be changed**. As a result, **each transformation of an RDD creates a new RDD**. Finally, we can apply one or more **actions** to the RDDs. Spark uses lazy evaluation, so transformations are not actually executed until an action occurs.
 
 
-<img src="rdd1.png" width=500>
+<img src="./images/rdd_diagram.png" width=500>
 
 ### Transformations
 
@@ -97,6 +97,9 @@ len(nums)
 
 ### Initialize an RDD
 
+When using Spark to make computations, datasets are treated as lists of entries. Those lists are split into different partitions across different cores or different computers. Each list of data held in memory is a partition of the RDD. The reason why Spark is able to make computations far faster than other big data processing languages is that it allows all data to be stored __in-memory__, which allows for easy access to the data and, in turn, high-speed processing. Here is an example of how the alphabet might be split into different RDDs and held across a distributed collection of nodes:
+
+<img src ="./images/partitions.png" width ="500">  
 To initialize an RDD, first import `pyspark` and then create a SparkContext assigned to the variable `sc`. Use 'local[*]' as the master.
 
 
@@ -105,7 +108,7 @@ import pyspark
 sc = pyspark.SparkContext('local[*]')
 ```
 
-Once you've created the SparkContext, you can use the `parallelize` method to create an rdd. Here, create one called `rdd` with 10 partitions using `data` as the collection you are parallelizing.
+Once you've created the SparkContext, you can use the `parallelize` method to create an rdd will distribute the list of numbers across multiple cores. Here, create one called `rdd` with 10 partitions using `data` as the collection you are parallelizing.
 
 
 ```python
@@ -1655,7 +1658,14 @@ selected_items.count()
 
 ## Reduce
 
-Now it's time to figure out how much money BuyStuff would make from selling one of all of its items after they've reduced their inventory. Use a reduce method with a lambda function to add up all of the values in the RDD. Your lambda function should have two variables.
+Reduce functions are where you are in some way combing all of the variables that you have mapped out. Here is an example of how a reduce function works when the task is to sum all values:
+
+<img src = "./images/reduce_function.png" width = "600">  
+
+
+As you can see, the operation is performed within each partition first, after which, the results of the computations in each partition are combined to come up with one final answer.  
+
+Now it's time to figure out how much money BuyStuff would make from selling one of all of its items after they've reduced their inventory. Use a reduce method with a lambda function to add up all of the values in the RDD. Your lambda function should have two variables. 
 
 
 ```python
