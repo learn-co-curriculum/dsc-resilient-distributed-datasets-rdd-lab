@@ -1,4 +1,3 @@
-
 ## Resilient Distributed Datasets (RDDs) - Lab
 
 Resilient Distributed Datasets (RDD) are fundamental data structures of Spark. An RDD is essentially the Spark representation of a set of data, spread across multiple machines, with APIs to let you act on it. An RDD can come from any data source, e.g. text files, a database, a JSON file, etc.
@@ -21,23 +20,19 @@ You will be able to:
 
 To get a better understanding of RDDs, let's break down each one of the components of the acronym RDD:
 
-Resilient: RDDs are considered "resilient" because they have built-in fault tolerance. This means that even if one of the nodes goes offline, RDDs will be able to restore the data. This is already a huge advantage compared to standard storage. If a standard computer dies while performing an operation, all of its memory will be lost in the process. With RDDs, multiple nodes can go offline, and the action will still be held in working memory.
+**Resilient:** RDDs are considered "resilient" because they have built-in fault tolerance. This means that even if one of the nodes goes offline, RDDs will be able to restore the data. This is already a huge advantage compared to standard storage. If a standard computer dies while performing an operation, all of its memory will be lost in the process. With RDDs, multiple nodes can go offline, and the action will still be held in working memory.
 
-Distributed: The data is contained on multiple nodes of a cluster-computing operation. It is efficiently partitioned to allow for parallelism.
+**Distributed:** The data is contained on multiple nodes of a cluster-computing operation. It is efficiently partitioned to allow for parallelism.
 
-Dataset: The dataset has been * partitioned * across the multiple nodes. 
+**Dataset:** The dataset has been * partitioned * across the multiple nodes. 
 
 RDDs are the building block upon which more high-level Spark operations are based upon. Chances are, if you are performing an action using Spark, the operation involves RDDs. 
 
-
-
 Key Characteristics of RDDs:
 
-- Immutable: Once an RDD is created, it cannot be modified. 
-- Lazily Evaluated: RDDs will not be evaluated until an action is triggered. Essentially, when RDDs are created, they are programmed to perform some action, but that function will not get activated until it is explicitly called. The reason for lazy evaluation is that allows users to organize the actions of their Spark program into smaller actions. It also saves unnecessary computation and memory load.
-- In-Memory: The operations in Spark are performed in-memory rather than in the database. This is what allows Spark to perform fast operations with very large quantities of data.
-
-
+- **Immutable:** Once an RDD is created, it cannot be modified. 
+- **Lazily Evaluated:** RDDs will not be evaluated until an action is triggered. Essentially, when RDDs are created, they are programmed to perform some action, but that function will not get activated until it is explicitly called. The reason for lazy evaluation is that allows users to organize the actions of their Spark program into smaller actions. It also saves unnecessary computation and memory load.
+- **In-Memory:** The operations in Spark are performed in-memory rather than in the database. This is what allows Spark to perform fast operations with very large quantities of data.
 
 
 ### RDD Transformations vs Actions
@@ -92,7 +87,8 @@ len(data)
 
 When using Spark to make computations, datasets are treated as lists of entries. Those lists are split into different partitions across different cores or different computers. Each list of data held in memory is a partition of the RDD. The reason why Spark is able to make computations far faster than other big data processing languages is that it allows all data to be stored __in-memory__, which allows for easy access to the data and, in turn, high-speed processing. Here is an example of how the alphabet might be split into different RDDs and held across a distributed collection of nodes:
 
-<img src ="./images/partitions_1.png" width ="500">  
+<img src ="./images/partitions_1.png" width ="500">
+
 To initialize an RDD, first import `pyspark` and then create a SparkContext assigned to the variable `sc`. Use `'local[*]'` as the master.
 
 
@@ -157,6 +153,8 @@ It's important to note that in a big data context, calling the collect method wi
 
 ```python
 # collect
+## Note: When you are dealing with big data, this could make your computer crash!
+## It's best to avoid using the collect() method
 
 ```
 
@@ -166,9 +164,10 @@ Now that you've been working a little bit with RDDs, let's make this a little mo
 
 
 ```python
-import random
+# Run this cell without changes
 import numpy as np
 
+np.random.seed(1)
 nums = np.array(range(1, 1001))
 sales_figures = nums * np.random.rand(1000)
 sales_figures
@@ -182,12 +181,13 @@ price_items = None
 
 ```
 
-Now let's perform some operations on this simple dataset. To begin with, create a function that will take into account how much money BuyStuff will receive after sales tax has been applied (assume a sales tax of 8%). To make this happen, create a function called `sales_tax()` that returns the amount of money our company will receive after the sales tax has been applied. The function will have this parameter:
+Now let's perform some operations on this simple dataset. To begin with, create a function that will take into account how much money BuyStuff will receive after sales tax has been applied. Assume a sales tax of 8%, i.e. that the current price data is actually 108% of what it should be.
 
-* `item`: (float) number to be multiplied by the sales tax.
+To make this happen, create a function called `sales_tax()` that returns the amount of money our company will receive after the sales tax has been applied. The function will have this parameter:
 
+* `num`: (float) number to be multiplied by the sales tax.
 
-Apply that function to the rdd by using the `.map()` method and assign it to a variable `renenue_minus_tax`
+Apply that function to the RDD by using the `.map()` method and assign it to a variable `renenue_minus_tax`
 
 
 ```python
@@ -197,7 +197,7 @@ def sales_tax(num):
 revenue_minus_tax = None
 ```
 
-Remember, Spark has __lazy evaluation__, which means that the `sales_tax()` function is a transformer that is not executed until you call an action. Use one of the collection methods to execute the transformer now a part of the RDD and observe the contents of the `revenue_minus_tax` rdd.
+Remember, Spark has __lazy evaluation__, which means that the `sales_tax()` function is a transformer that is not executed until you call an action. Use one of the collection methods to execute the transformer now a part of the RDD and observe the contents of the `revenue_minus_tax` RDD.
 
 
 ```python
@@ -260,7 +260,8 @@ print(flat_mapped.take(10))
 Rather than being represented by tuples, all of the  values are now on the same level. When we are trying to combine different items together, it is sometimes necessary to use `.flatMap()` rather than `.map()` in order to properly reduce to our specifications. This is not one of those instances, but in the upcoming lab, you just might have to use it.
 
 ## Filter
-After meeting with some external consultants, BuyStuff has determined that its business will be more profitable if it focuses on higher ticket items. Now, use the `.filter()` method to select items that bring in more than $300 after tax and discount have been removed. A filter method is a specialized form of a map function that only returns the items that match a certain criterion. In the cell below:
+After meeting with some external consultants, BuyStuff has determined that its business will be more profitable if it focuses on higher ticket items. Now, use the `.filter()` method to select items that bring in more than &#36;300 after tax and discount have been removed. A filter method is a specialized form of a map function that only returns the items that match a certain criterion. In the cell below:
+
 * use a lambda function within a `.filter()` method to meet the consultant's suggestion's specifications. set `RDD = selected_items`
 * calculate the total number of items remaining in BuyStuff's inventory
 
@@ -293,6 +294,7 @@ The time has come for BuyStuff to open up shop and start selling its goods. It o
 
 
 ```python
+# Run this cell without changes
 import random
 random.seed(42)
 # generating simulated users that have bought each item
@@ -318,6 +320,15 @@ To do this we can use a method called `.reduceByKey()` to perform reducing opera
 ```
 
 Next, let's determine how many items were bought per user. This can be solved in one line using an RDD method. After you've counted the total number of items bought per person, sort the users from most number of items bought to least number of items. Time to start a customer loyalty program!
+
+
+```python
+
+```
+
+### Stop the SparkContext
+
+Now that we are finished with our analysis, stop the `sc`.
 
 
 ```python
