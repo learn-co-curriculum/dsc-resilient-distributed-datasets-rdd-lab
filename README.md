@@ -1,4 +1,4 @@
-## Resilient Distributed Datasets (RDDs) - Lab
+# Resilient Distributed Datasets (RDDs) - Lab
 
 Resilient Distributed Datasets (RDD) are fundamental data structures of Spark. An RDD is essentially the Spark representation of a set of data, spread across multiple machines, with APIs to let you act on it. An RDD can come from any data source, e.g. text files, a database, a JSON file, etc.
 
