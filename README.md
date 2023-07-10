@@ -86,8 +86,8 @@ len(data)
 
 ```python
 # __SOLUTION__ 
-nums = list(range(1,1001))
-len(nums)
+data = list(range(1,1001))
+len(data)
 ```
 
 
@@ -130,7 +130,7 @@ print(type(rdd))
 
 ```python
 # __SOLUTION__ 
-rdd = sc.parallelize(nums, numSlices=10)
+rdd = sc.parallelize(data, numSlices=10)
 print(type(rdd))
 ```
 
