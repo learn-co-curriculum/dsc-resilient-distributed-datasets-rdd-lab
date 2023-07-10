@@ -77,8 +77,8 @@ We need some data to start experimenting with RDDs. Let's create some sample dat
 
 
 ```python
-nums = list(range(1,1001))
-len(nums)
+data = list(range(1,1001))
+len(data)
 ```
 
 
@@ -106,7 +106,7 @@ Once you've created the SparkContext, you can use the `.parallelize()` method to
 
 
 ```python
-rdd = sc.parallelize(nums, numSlices=10)
+rdd = sc.parallelize(data, numSlices=10)
 print(type(rdd))
 ```
 
